@@ -3,7 +3,6 @@
     public class ChessProblem
     {
         private static Board board;
-        public static ChessStatus ChessStatus;
 
         public static void LoadFrom(string[] lines)
         {
@@ -11,7 +10,7 @@
         }
 
         // Определяет мат, шах или пат белым.
-        public static void CalculateChessStatus()
+        public static ChessStatus CalculateChessStatus()
         {
             var isCheck = IsCheckForWhite();
             var hasMoves = false;
@@ -29,10 +28,10 @@
             }
             if (isCheck)
                 if (hasMoves)
-                    ChessStatus = ChessStatus.Check;
-                else ChessStatus = ChessStatus.Mate;
-            else if (hasMoves) ChessStatus = ChessStatus.Ok;
-            else ChessStatus = ChessStatus.Stalemate;
+                    return ChessStatus.Check;
+                else return ChessStatus.Mate;
+            else if (hasMoves) return ChessStatus.Ok;
+            else return ChessStatus.Stalemate;
         }
 
         private static void MakeStep(Piece piece, Location locFrom, Location locTo)

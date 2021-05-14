@@ -22,12 +22,12 @@ namespace Chess
                 "        ",
             };
             ChessProblem.LoadFrom(boardLines);
-            ChessProblem.CalculateChessStatus();
-            Assert.AreEqual(ChessStatus.Check, ChessProblem.ChessStatus);
+            var chessStatus = ChessProblem.CalculateChessStatus();
+            Assert.AreEqual(ChessStatus.Check, chessStatus);
 
             // Now check that internal board modifications during the first call do not change answer
-            ChessProblem.CalculateChessStatus();
-            Assert.AreEqual(ChessStatus.Check, ChessProblem.ChessStatus);
+            chessStatus = ChessProblem.CalculateChessStatus();
+            Assert.AreEqual(ChessStatus.Check, chessStatus);
         }
 
         [Test]
@@ -48,8 +48,8 @@ namespace Chess
             var boardLines = File.ReadAllLines(filename);
             ChessProblem.LoadFrom(boardLines);
             var expectedAnswer = File.ReadAllText(Path.ChangeExtension(filename, ".ans")).Trim();
-            ChessProblem.CalculateChessStatus();
-            Assert.AreEqual(expectedAnswer, ChessProblem.ChessStatus.ToString().ToLower(), "Failed test " + filename);
+            var chessStatus = ChessProblem.CalculateChessStatus();
+            Assert.AreEqual(expectedAnswer, chessStatus.ToString().ToLower(), "Failed test " + filename);
         }
     }
 }
