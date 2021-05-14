@@ -11,18 +11,17 @@ namespace ControlDigit
 
             var parsedNumber = number;
 
-            for (var i = 1; i <= n; i++)
+            for (var positionFromEnd = 1; positionFromEnd <= n; positionFromEnd++)
             {
-                var position = n - (n - i + 1) + 1;
                 var numberOnPosition = parsedNumber % 10;
 
-                if (position % 2 == 1)
+                if (positionFromEnd % 2 == 1)
                 {
-                    result = result + numberOnPosition * 3;
+                    result += numberOnPosition * 3;
                 }
                 else
                 {
-                    result = result + numberOnPosition;
+                    result += numberOnPosition;
                 }
 
                 parsedNumber = parsedNumber / 10;
