@@ -8,7 +8,20 @@
             var initBoard = new BoardParser().ParseBoard(lines);
 
             var isCheck = IsCheckForWhite(initBoard);
+            bool hasMoves = HasMovesCheck(lines);
+
+            if (isCheck)
+                if (hasMoves)
+                    return ChessStatus.Check;
+                else return ChessStatus.Mate;
+            else if (hasMoves) return ChessStatus.Ok;
+            else return ChessStatus.Stalemate;
+        }
+
+        private static bool HasMovesCheck(string[] lines)
+        {
             var hasMoves = false;
+            var initBoard = new BoardParser().ParseBoard(lines);
             foreach (var locFrom in initBoard.GetPieces(PieceColor.White))
             {
                 foreach (var locTo in initBoard.GetPiece(locFrom).GetMoves(locFrom, initBoard))
@@ -21,12 +34,8 @@
                         hasMoves = true;
                 }
             }
-            if (isCheck)
-                if (hasMoves)
-                    return ChessStatus.Check;
-                else return ChessStatus.Mate;
-            else if (hasMoves) return ChessStatus.Ok;
-            else return ChessStatus.Stalemate;
+
+            return hasMoves;
         }
 
         private static void MakeStep(Board board, Piece piece, Location locFrom, Location locTo)
