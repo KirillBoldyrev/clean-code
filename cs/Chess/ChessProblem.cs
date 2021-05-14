@@ -2,28 +2,23 @@
 {
     public class ChessProblem
     {
-        private static Board board;
-
-        public static void LoadFrom(string[] lines)
-        {
-            board = new BoardParser().ParseBoard(lines);
-        }
-
         // Определяет мат, шах или пат белым.
-        public static ChessStatus CalculateChessStatus()
+        public static ChessStatus CalculateChessStatus(string[] lines)
         {
-            var isCheck = IsCheckForWhite();
+            var initBoard = new BoardParser().ParseBoard(lines);
+
+            var isCheck = IsCheckForWhite(initBoard);
             var hasMoves = false;
-            foreach (var locFrom in board.GetPieces(PieceColor.White))
+            foreach (var locFrom in initBoard.GetPieces(PieceColor.White))
             {
-                foreach (var locTo in board.GetPiece(locFrom).GetMoves(locFrom, board))
+                foreach (var locTo in initBoard.GetPiece(locFrom).GetMoves(locFrom, initBoard))
                 {
-                    var old = board.GetPiece(locTo);
-                    MakeStep(board.GetPiece(locFrom), locFrom, locTo);
-                    if (!IsCheckForWhite())
+                    var checkedBoard = new BoardParser().ParseBoard(lines);
+
+                    MakeStep(checkedBoard, checkedBoard.GetPiece(locFrom), locFrom, locTo);
+
+                    if (!IsCheckForWhite(checkedBoard))
                         hasMoves = true;
-                    board.Set(locFrom, board.GetPiece(locTo));
-                    board.Set(locTo, old);
                 }
             }
             if (isCheck)
@@ -34,14 +29,14 @@
             else return ChessStatus.Stalemate;
         }
 
-        private static void MakeStep(Piece piece, Location locFrom, Location locTo)
+        private static void MakeStep(Board board, Piece piece, Location locFrom, Location locTo)
         {
             board.Set(locTo, piece); 
             board.Set(locFrom, null);
         }
 
         // check — это шах
-        private static bool IsCheckForWhite()
+        private static bool IsCheckForWhite(Board board)
         {
             var isCheck = false;
             foreach (var loc in board.GetPieces(PieceColor.Black))
