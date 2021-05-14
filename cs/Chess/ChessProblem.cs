@@ -20,8 +20,7 @@
                 foreach (var locTo in board.GetPiece(locFrom).GetMoves(locFrom, board))
                 {
                     var old = board.GetPiece(locTo);
-                    board.Set(locTo, board.GetPiece(locFrom));
-                    board.Set(locFrom, null);
+                    MakeStep(board.GetPiece(locFrom), locFrom, locTo);
                     if (!IsCheckForWhite())
                         hasMoves = true;
                     board.Set(locFrom, board.GetPiece(locTo));
@@ -34,6 +33,12 @@
                 else ChessStatus = ChessStatus.Mate;
             else if (hasMoves) ChessStatus = ChessStatus.Ok;
             else ChessStatus = ChessStatus.Stalemate;
+        }
+
+        private static void MakeStep(Piece piece, Location locFrom, Location locTo)
+        {
+            board.Set(locTo, piece); 
+            board.Set(locFrom, null);
         }
 
         // check — это шах
